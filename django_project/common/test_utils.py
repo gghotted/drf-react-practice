@@ -3,10 +3,10 @@ from django.test import TestCase
 
 
 def login(client, username, password):
-    user = User.objects.create(username=username)
-    user.set_password(password)
-    user.save()
-
+    User.objects.create_user(
+        username=username,
+        password=password,
+    )
     client.login(username=username, password=password)
 
 
