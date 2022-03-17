@@ -15,3 +15,12 @@ class PostCreateAPITestCase(LoggedInTestCase):
         }
         res = self.client.post(reverse(self.urlname), data)
         self.assertEqual(201, res.status_code)
+
+    def test_400(self):
+        res = self.client.post(reverse(self.urlname))
+        self.assertEqual(400, res.status_code)
+
+    def test_403(self):
+        self.client.logout()
+        res = self.client.post(reverse(self.urlname))
+        self.assertEqual(403, res.status_code)
