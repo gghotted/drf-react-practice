@@ -1,5 +1,4 @@
-from common.test_utils import LoggedInTestCase, login
-from django.test import TestCase
+from common.test_utils import LoggedInTestCase
 from django.urls import reverse
 
 

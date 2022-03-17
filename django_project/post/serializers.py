@@ -8,7 +8,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = '__all__'
         read_only_fields = ('user',)
-    
+
     def validate(self, attrs):
         attrs['user'] = self.context['request'].user
         return attrs
