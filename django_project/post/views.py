@@ -11,6 +11,8 @@ class PostViewSet(ModelViewSet):
     serializer_class = PostSerializer
 
     def get_permissions(self):
+        if self.action == 'create':
+            return [IsAuthenticated()]
         if self.action in ('destroy', 'update', 'partial_update'):
             return [IsAuthenticated(), IsOwner()]
         return []
