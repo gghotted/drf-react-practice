@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.urls import reverse
 
 
 def create_default_user():
@@ -9,18 +10,20 @@ def create_default_user():
     )
 
 
-def login(client, username, password):
-    user = User.objects.create_user(
-        username=username,
-        password=password,
-    )
-    client.login(username=username, password=password)
-    return user
-
-
 class LoggedInTestCase(TestCase):
     username = 'username'
     password = 'password'
 
-    def setUp(self):
-        self.user = login(self.client, self.username, self.password)
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(
+            username=cls.username,
+            password=cls.password,
+        )
+        data = {
+            'username': cls.username,
+            'password': cls.password,
+        }
+        res = cls.client_class().post(reverse('user:login'), data)
+        cls.jwt = res.json()
+        cls.headers = {'HTTP_AUTHORIZATION': f'Bearer {cls.jwt["access"]}'}

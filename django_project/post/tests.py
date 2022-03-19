@@ -18,17 +18,16 @@ class PostCreateAPITestCase(LoggedInTestCase):
             'title': 'test title',
             'content': 'test content',
         }
-        res = self.client.post(reverse(self.urlname), data)
+        res = self.client.post(reverse(self.urlname), data, **self.headers)
         self.assertEqual(201, res.status_code)
 
     def test_400(self):
-        res = self.client.post(reverse(self.urlname))
+        res = self.client.post(reverse(self.urlname), **self.headers)
         self.assertEqual(400, res.status_code)
 
-    def test_403(self):
-        self.client.logout()
+    def test_401(self):
         res = self.client.post(reverse(self.urlname))
-        self.assertEqual(403, res.status_code)
+        self.assertEqual(401, res.status_code)
 
 
 class PostDetailAPITestCase(TestCase):
@@ -117,7 +116,7 @@ class PostUpdateAPITestCase(LoggedInTestCase):
             'title': 'updated title',
             'content': 'updated content',
         }
-        res = self.client.patch(url, data, 'application/json')
+        res = self.client.patch(url, data, 'application/json', **self.headers)
         self.assertEqual(200, res.status_code)
         post = Post.objects.get(pk=self.post.pk)
         self.assertEqual(data, {'title': post.title, 'content': post.content})
@@ -129,18 +128,17 @@ class PostUpdateAPITestCase(LoggedInTestCase):
         )
         new_post = PostDetailAPITestCase.create_testdata(user=new_user)
         url = reverse(self.urlname, kwargs={'pk': new_post.pk})
-        res = self.client.patch(url, {}, 'application/json')
+        res = self.client.patch(url, {}, 'application/json', **self.headers)
         self.assertEqual(403, res.status_code)
     
-    def test_403_2(self):
-        self.client.logout()
+    def test_401(self):
         url = reverse(self.urlname, kwargs={'pk': self.post.pk})
         res = self.client.patch(url, {}, 'application/json')
-        self.assertEqual(403, res.status_code)
+        self.assertEqual(401, res.status_code)
 
     def test_404(self):
         url = reverse(self.urlname, kwargs={'pk': self.post.pk + 1})
-        res = self.client.patch(url, {}, 'application/json')
+        res = self.client.patch(url, {}, 'application/json', **self.headers)
         self.assertEqual(404, res.status_code)
 
 
@@ -153,7 +151,7 @@ class PostDeleteAPITestCase(LoggedInTestCase):
 
     def test_204(self):
         url = reverse(self.urlname, kwargs={'pk': self.post.pk})
-        res = self.client.delete(url)
+        res = self.client.delete(url, **self.headers)
         self.assertEqual(204, res.status_code)
 
     def test_403(self):
@@ -163,16 +161,15 @@ class PostDeleteAPITestCase(LoggedInTestCase):
         )
         new_post = PostDetailAPITestCase.create_testdata(user=new_user)
         url = reverse(self.urlname, kwargs={'pk': new_post.pk})
-        res = self.client.delete(url)
+        res = self.client.delete(url, **self.headers)
         self.assertEqual(403, res.status_code)
 
-    def test_403_2(self):
-        self.client.logout()
+    def test_401(self):
         url = reverse(self.urlname, kwargs={'pk': self.post.pk})
         res = self.client.delete(url)
-        self.assertEqual(403, res.status_code)
+        self.assertEqual(401, res.status_code)
 
     def test_404(self):
         url = reverse(self.urlname, kwargs={'pk': self.post.pk + 1})
-        res = self.client.delete(url)
+        res = self.client.delete(url, **self.headers)
         self.assertEqual(404, res.status_code)
