@@ -17,18 +17,23 @@ class UserMeAPITestCase(LoggedInTestCase):
         self.assertEqual(reverse(self.urlname), '/user/me/')
 
     def test_200(self):
-        res = self.client.get(reverse(self.urlname))
+        res = self.client.get(reverse(self.urlname), **self.headers)
         self.assertEqual(200, res.status_code)
         self.assertTrue(self.response_schema.is_valid(res.json()))
         
-    def test_403(self):
-        self.client.logout()
+    def test_401(self):
         res = self.client.get(reverse(self.urlname))
-        self.assertEqual(403, res.status_code)
+        self.assertEqual(401, res.status_code)
 
 
 class LoginAPITestCase(TestCase):
     urlname = 'user:login'
+    response_schema = Schema(
+        {
+            'refresh': str,
+            'access': str,
+        }
+    )
 
     @classmethod
     def setUpTestData(cls):
@@ -50,10 +55,10 @@ class LoginAPITestCase(TestCase):
         res = self.client.post(reverse(self.urlname), data)
         self.assertEqual(200, res.status_code)
 
-    def test_400(self):
+    def test_401(self):
         data = {
             'username': self.username,
             'password': self.password * 2,
         }
         res = self.client.post(reverse(self.urlname), data)
-        self.assertEqual(400, res.status_code)
+        self.assertEqual(401, res.status_code)
