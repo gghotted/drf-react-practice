@@ -26,4 +26,4 @@ class LoggedInTestCase(TestCase):
         }
         res = cls.client_class().post(reverse('user:login'), data)
         cls.jwt = res.json()
-        cls.headers = {'HTTP_AUTHORIZATION': f'Bearer {cls.jwt["access"]}'}
+        cls.headers = {'HTTP_AUTHORIZATION': f'Bearer {cls.jwt["access_token"]}'}

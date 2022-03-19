@@ -55,10 +55,10 @@ class LoginAPITestCase(TestCase):
         res = self.client.post(reverse(self.urlname), data)
         self.assertEqual(200, res.status_code)
 
-    def test_401(self):
+    def test_400(self):
         data = {
             'username': self.username,
             'password': self.password * 2,
         }
         res = self.client.post(reverse(self.urlname), data)
-        self.assertEqual(401, res.status_code)
+        self.assertEqual(400, res.status_code)
