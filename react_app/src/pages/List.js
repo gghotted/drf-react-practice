@@ -1,8 +1,6 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-import CssBaseline from '@mui/material/CssBaseline';
-import Container from '@mui/material/Container';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,6 +12,9 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Link from '@mui/material/Link';
 
+import LoginInfo from './components/LoginInfo';
+import MyContainer from './components/MyContainer';
+
 function List() {
     const [posts, setPosts] = useState(null);
     const [error, setError] = useState(null);
@@ -21,7 +22,6 @@ function List() {
     const [page, setPage] = useState(1);
 
     const fetchPosts = async (page) => {
-        // alert('run fetchPosts');
         setPosts(null);
         setError(null);
         setLoading(true);
@@ -51,45 +51,43 @@ function List() {
     if (!posts) return <div>posts 없음</div>;
     
     return (
-        <Fragment>
-            <CssBaseline />
-            <Container maxWidth="lg">
-                <TableContainer component={Paper} elevation={2}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>번호</TableCell>
-                                <TableCell>제목</TableCell>
-                                <TableCell>작성자</TableCell>
+        <MyContainer>
+            <LoginInfo></LoginInfo>
+            <TableContainer component={Paper} elevation={2}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>번호</TableCell>
+                            <TableCell>제목</TableCell>
+                            <TableCell>작성자</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {posts.results.map((post) => (
+                            <TableRow
+                                key={post.id}
+                                component={Link}
+                                hover={true}
+                                href={`/${post.id}`}
+                            >
+                                <TableCell>{post.id}</TableCell>
+                                <TableCell>{post.title}</TableCell>
+                                <TableCell>{post.user}</TableCell>
                             </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {posts.results.map((post) => (
-                                <TableRow
-                                    key={post.id}
-                                    component={Link}
-                                    hover={true}
-                                    href={`/${post.id}`}
-                                >
-                                    <TableCell>{post.id}</TableCell>
-                                    <TableCell>{post.title}</TableCell>
-                                    <TableCell>{post.user}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                    <Stack
-                        alignItems={'center'}
-                    >
-                        <Pagination 
-                            page={page}
-                            onChange={handlePageChange}
-                            count={Math.ceil(posts.count / 10)}
-                        />
-                    </Stack>
-                </TableContainer>
-            </Container>
-        </Fragment>
+                        ))}
+                    </TableBody>
+                </Table>
+                <Stack
+                    alignItems={'center'}
+                >
+                    <Pagination 
+                        page={page}
+                        onChange={handlePageChange}
+                        count={Math.ceil(posts.count / 10)}
+                    />
+                </Stack>
+            </TableContainer>
+        </MyContainer>
     );
 }
 

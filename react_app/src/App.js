@@ -1,5 +1,6 @@
 import List from './pages/List';
 import Detail from './pages/Detail';
+import Login from './pages/Login';
 import {
   BrowserRouter as Router,
   Routes,
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<List/>}></Route>
         <Route path="/:id" element={<Detail/>}></Route>
+        <Route path="/login" element={<Login/>}></Route>
       </Routes>
     </Router>
   );
