@@ -59,7 +59,6 @@ function List() {
     
     return (
         <MyContainer>
-            <LoginInfo></LoginInfo>
             <TableContainer component={Paper} elevation={2}>
                 <Table>
                     <TableHead>

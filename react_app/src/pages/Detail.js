@@ -15,7 +15,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Stack } from '@mui/material';
 
 import MyContainer from './components/MyContainer';
-import LoginInfo from './components/LoginInfo';
 
 function Detail() {
     let { id } = useParams();
@@ -59,7 +58,6 @@ function Detail() {
 
     return (
         <MyContainer>
-            <LoginInfo></LoginInfo>
             <Paper 
                 sx={{
                     p: 2,
