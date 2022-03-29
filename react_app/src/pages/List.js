@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useSearchParams, useNavigate, useLocation, Link } from "react-router-dom";
 import axios from 'axios'
 
 import Table from '@mui/material/Table';
@@ -10,7 +11,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import Link from '@mui/material/Link';
 
 import LoginInfo from './components/LoginInfo';
 import MyContainer from './components/MyContainer';
@@ -19,9 +19,15 @@ function List() {
     const [posts, setPosts] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(null);
-    const [page, setPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const location = useLocation();
+    const navigate = useNavigate();
+    var page = searchParams.get('page');
 
-    const fetchPosts = async (page) => {
+    if (!page) page = 1;
+    else page = Number(page);
+
+    const fetchPosts = async () => {
         setPosts(null);
         setError(null);
         setLoading(true);
@@ -29,7 +35,6 @@ function List() {
         try {
             const res = await axios.get(`/post/?page=${page}`);
             setPosts(res.data);
-            setPage(page);
         } catch (e){
             setError(e);
             console.log(e);
@@ -39,11 +44,13 @@ function List() {
     }
 
     const handlePageChange = (event, value) => {
-        fetchPosts(value);
+        page = value;
+        fetchPosts();
+        navigate(`/?page=${value}`);
     }
 
     useEffect(() => {
-        fetchPosts(1);
+        fetchPosts();
     }, []);
 
     if (error) return <div>에러발생</div>;
@@ -68,7 +75,8 @@ function List() {
                                 key={post.id}
                                 component={Link}
                                 hover={true}
-                                href={`/${post.id}`}
+                                to={`/${post.id}`}
+                                state={{from: location.pathname + location.search}}
                             >
                                 <TableCell>{post.id}</TableCell>
                                 <TableCell>{post.title}</TableCell>

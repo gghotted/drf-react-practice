@@ -173,3 +173,38 @@ class PostDeleteAPITestCase(LoggedInTestCase):
         url = reverse(self.urlname, kwargs={'pk': self.post.pk + 1})
         res = self.client.delete(url, **self.headers)
         self.assertEqual(404, res.status_code)
+
+
+class HasPermissionDeletePostTestCase(LoggedInTestCase):
+    urlname = 'post:has_delete_permission'
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.post = PostDetailAPITestCase.create_testdata(user=cls.user)
+        cls.user2 = User.objects.create_user(
+            username='username2',
+            password='password',
+        )
+        cls.post2 = PostDetailAPITestCase.create_testdata(user=cls.user2)
+
+    def test_url(self):
+        self.assertEqual(
+            f'/post/{self.post.id}/has-delete-permission/',
+            reverse(self.urlname, kwargs={'pk': self.post.pk})
+        )
+
+    def test_true(self):
+        res = self.client.get(reverse(self.urlname, kwargs={'pk': self.post.pk}), **self.headers)
+        self.assertEqual(200, res.status_code)
+        self.assertTrue(res.json()['has_permission'])
+
+    def test_false(self):
+        res = self.client.get(reverse(self.urlname, kwargs={'pk': self.post2.pk}), **self.headers)
+        self.assertEqual(200, res.status_code)
+        self.assertFalse(res.json()['has_permission'])
+
+    def test_false_no_auth(self):
+        res = self.client.get(reverse(self.urlname, kwargs={'pk': self.post.pk}))
+        self.assertEqual(200, res.status_code)
+        self.assertFalse(res.json()['has_permission'])

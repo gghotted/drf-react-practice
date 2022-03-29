@@ -16,4 +16,7 @@ class PostSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['user'] = instance.user.username
+        request = self.context['request']
+        data['has_delete_permission'] = instance.user == request.user
+        data['has_update_permission'] = instance.user == request.user
         return data

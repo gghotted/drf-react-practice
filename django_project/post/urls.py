@@ -10,4 +10,5 @@ router.register('', views.PostViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('<int:pk>/has-delete-permission/', views.HasPermissionPostDelete.as_view(), name='has_delete_permission'),
 ]
