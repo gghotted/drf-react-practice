@@ -45,13 +45,12 @@ function List() {
 
     const handlePageChange = (event, value) => {
         page = value;
-        fetchPosts();
         navigate(`/?page=${value}`);
     }
 
     useEffect(() => {
         fetchPosts();
-    }, []);
+    }, [page]);
 
     if (error) return <div>에러발생</div>;
     if (loading) return <div>로딩중</div>;
