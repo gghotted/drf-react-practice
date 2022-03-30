@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import MyContainer from "./components/MyContainer";
 
-function Create() {
+function Create(props) {
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -19,7 +19,8 @@ function Create() {
 
     return (
         <MyContainer>
-           <Box component="form" onSubmit={handleSubmit}>
+           <Box component="form" onSubmit={
+               props.onSubmit ? props.onSubmit : handleSubmit}>
                 <TextField
                     required
                     id="title"
@@ -29,6 +30,9 @@ function Create() {
                     sx={{
                         mt: 3
                     }}
+                    defaultValue={
+                        props.title ? props.title : ""
+                    }
                 />
                 <TextField
                     required
@@ -41,6 +45,9 @@ function Create() {
                     sx={{
                         mt: 1,
                     }}
+                    defaultValue={
+                        props.content ? props.content : ""
+                    }
                 />
                 <Stack direction="row" justifyContent="space-between">
                     <div></div>
