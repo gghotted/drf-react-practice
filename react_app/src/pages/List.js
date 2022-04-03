@@ -12,11 +12,12 @@ import Paper from '@mui/material/Paper';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-import LoginInfo from './components/LoginInfo';
 import MyContainer from './components/MyContainer';
+import { Box, Button } from '@mui/material';
 
 function List() {
     const [posts, setPosts] = useState(null);
+    const [loggedIn, setLoggedIn] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -48,6 +49,10 @@ function List() {
         navigate(`/?page=${value}`);
     }
 
+    const handleCreatePostButton = () => {
+        navigate('/create', {state: {from: location.pathname + location.search}});
+    }
+
     useEffect(() => {
         fetchPosts();
     }, [page]);
@@ -57,7 +62,11 @@ function List() {
     if (!posts) return <div>posts 없음</div>;
     
     return (
-        <MyContainer>
+        <MyContainer onLogin={() => setLoggedIn(true)} onLogout={() => setLoggedIn(false)}>
+            <Box textAlign={'right'} sx={{p: 1}}>
+                {loggedIn === true &&
+                (<Button variant='contained' onClick={handleCreatePostButton}>쓰기</Button>)} 
+            </Box>
             <TableContainer
                 component={Paper}
                 elevation={2}
@@ -78,6 +87,7 @@ function List() {
                                 hover={true}
                                 to={`/${post.id}`}
                                 state={{from: location.pathname + location.search}}
+                                sx={{textDecoration: 'none', color: 'black'}}
                             >
                                 <TableCell>{post.id}</TableCell>
                                 <TableCell>{post.title}</TableCell>
@@ -89,7 +99,8 @@ function List() {
                 <Stack
                     alignItems={'center'}
                 >
-                    <Pagination 
+                    <Pagination
+                        sx={{p:1}}
                         page={page}
                         onChange={handlePageChange}
                         count={Math.ceil(posts.count / 10)}
