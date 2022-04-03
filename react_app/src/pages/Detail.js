@@ -12,7 +12,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 
 import MyContainer from './components/MyContainer';
 
@@ -58,6 +58,12 @@ function Detail() {
 
     return (
         <MyContainer>
+            <Box p={1} textAlign={'right'}>
+                {post.has_update_permission === true &&
+                (<Button variant='contained' onClick={handleGoUpdateButton}>수정</Button>)}
+                {post.has_delete_permission === true &&
+                (<Button variant='contained' color='error' onClick={handleDeleteSafeButton}>삭제</Button>)}
+            </Box>
             <Paper 
                 sx={{
                     p: 2,
@@ -71,21 +77,17 @@ function Detail() {
                 />
                 {post.content}
             </Paper>
-            <Stack direction='row' justifyContent='space-between'>
-                {post.has_update_permission === true &&
-                (<Button variant='outlined' onClick={handleGoUpdateButton}>수정</Button>)}
-                <Button variant='outlined' onClick={handleGoListButton}>목록</Button>
-                {post.has_delete_permission === true &&
-                (<Button variant='outlined' color='error' onClick={handleDeleteSafeButton}>삭제</Button>)}
-                <Dialog open={deleteDialogOpen} onClose={() => {setDeleteDialogOpen(false)}}>
-                    <DialogTitle>삭제 할까요?</DialogTitle>
-                    <DialogContent><DialogContentText>삭제 후 복구가 불가능 합니다.</DialogContentText></DialogContent>
-                    <DialogActions>
-                        <Button variant='outlined' onClick={() => {setDeleteDialogOpen(false)}}>취소</Button>
-                        <Button variant='outlined' color='error' onClick={handleDeleteButton}>삭제</Button>
-                    </DialogActions>
-                </Dialog>
-            </Stack>
+            <Box p={1} textAlign={'right'}>
+                <Button variant='contained' color={'inherit'} onClick={handleGoListButton}>목록</Button>
+            </Box>
+            <Dialog open={deleteDialogOpen} onClose={() => {setDeleteDialogOpen(false)}}>
+                <DialogTitle>삭제 할까요?</DialogTitle>
+                <DialogContent><DialogContentText>삭제 후 복구가 불가능 합니다.</DialogContentText></DialogContent>
+                <DialogActions>
+                    <Button variant='contained' onClick={() => {setDeleteDialogOpen(false)}}>취소</Button>
+                    <Button variant='contained' color='error' onClick={handleDeleteButton}>삭제</Button>
+                </DialogActions>
+            </Dialog>
         </MyContainer>
     )
 }
