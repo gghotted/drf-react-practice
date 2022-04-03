@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 import MyContainer from './components/MyContainer';
-import { Alert, Box } from '@mui/material';
+import { Alert, Box, Paper, Stack } from '@mui/material';
 
 function Login() {
     const [errmsg, setErrmsg] = useState('');
@@ -36,33 +36,28 @@ function Login() {
 
     return (
         <MyContainer>
-            <Box component="form" onSubmit={handleLoginButton}>
-                <TextField
-                    required
-                    id="username"
-                    label="username"
-                    name="username"
-                    fullWidth
-                    sx={{
-                        mt: 3
-                    }}
-                />
-                <TextField
-                    required
-                    id="password"
-                    label="password"
-                    name="password"
-                    fullWidth
-                    type="password"
-                    sx={{
-                        mt: 1,
-                        mb: 3
-                    }}
-                />
-                {errmsg !== '' &&
-                <Alert severity='error'>{errmsg}</Alert>}
-                <Button fullWidth variant='outlined' type="submit">로그인</Button>
-            </Box>
+            <Paper>
+                <Box component="form" onSubmit={handleLoginButton}>
+                    <Stack spacing={3} p={25}>
+                        <TextField
+                            required
+                            id="username"
+                            label="username"
+                            name="username"
+                        />
+                        <TextField
+                            required
+                            id="password"
+                            label="password"
+                            name="password"
+                            type="password"
+                        />
+                        {errmsg !== '' &&
+                        <Alert severity='error'>{errmsg}</Alert>}
+                        <Button color={'success'} variant='contained' type="submit">로그인</Button>
+                    </Stack>
+                </Box>
+            </Paper>
         </MyContainer>
     )
 }
