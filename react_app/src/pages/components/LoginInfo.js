@@ -58,7 +58,7 @@ function LoginInfo() {
         <Stack direction="row" justifyContent="space-between">
             <div>{user.username}님 환영합니다.</div>
             <Button color="error" variant='outlined' onClick={handleLogoutButton}>로그아웃</Button>
-            <Button variant='outlined' onClick={handleCreatePostButton}>쓰기</Button>
+            <Button variant='contained' onClick={handleCreatePostButton}></Button>
         </Stack>
     )
 }
