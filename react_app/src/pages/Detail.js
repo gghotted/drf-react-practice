@@ -62,7 +62,7 @@ function Detail() {
                 {post.has_update_permission === true &&
                 (<Button variant='contained' onClick={handleGoUpdateButton}>수정</Button>)}
                 {post.has_delete_permission === true &&
-                (<Button variant='contained' color='error' onClick={handleDeleteSafeButton}>삭제</Button>)}
+                (<Button variant='contained' color='warning' onClick={handleDeleteSafeButton}>삭제</Button>)}
             </Box>
             <Paper 
                 sx={{
@@ -85,7 +85,7 @@ function Detail() {
                 <DialogContent><DialogContentText>삭제 후 복구가 불가능 합니다.</DialogContentText></DialogContent>
                 <DialogActions>
                     <Button variant='contained' onClick={() => {setDeleteDialogOpen(false)}}>취소</Button>
-                    <Button variant='contained' color='error' onClick={handleDeleteButton}>삭제</Button>
+                    <Button variant='contained' color='warning' onClick={handleDeleteButton}>삭제</Button>
                 </DialogActions>
             </Dialog>
         </MyContainer>
